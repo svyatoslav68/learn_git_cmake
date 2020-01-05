@@ -8,3 +8,7 @@ set(SOURCE_DIR src)
 file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
 
 add_executable(${TARGET} ${SOURCES})
+find_package(Boost REQUIRED COMPONENTS program_options)
+target_link_libraries(${TARGET} ${Boost_LIBRARIES})
+target_include_directories(${TARGET} PUBLIC ${Boost_INCLUDE_DIRS})
+

@@ -1,6 +1,7 @@
 /* File realisation of class application
    filename - app.cpp */
 
+#include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -17,13 +18,27 @@ App::App(int argc, char **argv){
 	po::notify(op_store);
 }
 
-void App::exec() const{
+void App::exec() {//const{
 	if (op_store.count("help")){
 		std::cout << "Help on application:" << std::endl;
 		std::cout << ops_desc << std::endl;
 	}
 	if (op_store.count("args")){
-		std::cout << "Args for summing: " << op_store["args"].as< std::vector<std::string> >()[0] << std::endl;
+		using boost::lexical_cast;
+		using boost::bad_lexical_cast;
+		auto it = op_store["args"].as<std::vector<std::string>>().begin();
+		std::cout << "Args for summing: ";
+		while(it != op_store["args"].as<std::vector<std::string>>().end()){
+			args.push_back(lexical_cast<double>(*it++));
+			//std::cout << lexical_cast<double>(*it++) << " ";
+		}
+		std::cout << std::endl;
+		//std::cout << "Args for summing: " << op_store["args"].as< std::vector<std::string> >()[0];
+		//std::cout << ", " << op_store["args"].as<std::vector<std::string> >()[1] << std::endl;
+	}
+	else {
+		std::cout << "Few parametrs" << std::endl;
+		exit(1);
 	}
 }
 

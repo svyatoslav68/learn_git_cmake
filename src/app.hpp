@@ -9,10 +9,12 @@ class App {
 public:
 	App(){};
 	App(int, char **);
-	void exec() const;
+	void exec() ;//const;
+	const std::vector<double> &getArgs() const{return args;}
 private:
 	po::options_description ops_desc; // Options description (Описание опций)
 	po::positional_options_description pos_desc; // Positional options description
 	po::variables_map op_store;		// Container for store received options
+	std::vector<double> args;
 };
 

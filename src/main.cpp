@@ -16,7 +16,13 @@ int main(int argc, char **argv){
 	app.exec();
 	const std::vector<double> &args = app.getArgs();
 	//result = sum(x,y);
-	result = std::accumulate(args.cbegin(), args.cend(), 0.0, std::plus<double>());
-	std::cout << "Сумма чисел " <<  "[ " << JOIN_ELEMENTS(args) << "] " << result << std::endl;
+	if (app.getTypeOp() == App::multiply){
+		result = std::accumulate(args.cbegin(), args.cend(), 1.0, std::multiplies<double>());
+		std::cout << "Произведение чисел " <<  "[ " << JOIN_ELEMENTS(args) << "] " << result << std::endl;
+	}
+	else{
+		result = std::accumulate(args.cbegin(), args.cend(), 0.0, std::plus<double>());
+		std::cout << "Сумма чисел " <<  "[ " << JOIN_ELEMENTS(args) << "] " << result << std::endl;
+	}
 	return 0;
 }

@@ -11,6 +11,8 @@ App::App(int argc, char **argv){
 	ops_desc.add_options()
 		("help,h", "Show help")
 		("version,v", "Show version of application")
+		("sum,s", "Summing arguments")
+		("multiply,m", "Multiplication of argument")
 		("args", po::value< std::vector<std::string> >(), "Arguments")
 	;
 	pos_desc.add("args", -1);
@@ -19,6 +21,7 @@ App::App(int argc, char **argv){
 }
 
 void App::exec() {//const{
+try{
 	if (op_store.count("help")){
 		std::cout << "Help on application:" << std::endl;
 		std::cout << ops_desc << std::endl;
@@ -27,7 +30,7 @@ void App::exec() {//const{
 		using boost::lexical_cast;
 		using boost::bad_lexical_cast;
 		auto it = op_store["args"].as<std::vector<std::string>>().begin();
-		std::cout << "Args for summing: ";
+		//std::cout << "Args for summing: ";
 		while(it != op_store["args"].as<std::vector<std::string>>().end()){
 			args.push_back(lexical_cast<double>(*it++));
 			//std::cout << lexical_cast<double>(*it++) << " ";
@@ -40,5 +43,24 @@ void App::exec() {//const{
 		std::cout << "Few parametrs" << std::endl;
 		exit(1);
 	}
+	conflicting_option("multiply", "sum");
+}
+catch (std::exception &e){
+	std::cerr << e.what() << std::endl;
+	exit(1);
+}
+}
+
+// Функция предназначена для определения конфликтующих опций
+void App::conflicting_option(const char *opt1, const char *opt2){
+	if (op_store.count(opt1) && op_store.count(opt2)) {
+		throw std::logic_error(std::string("Conflicting option"));
+	}
+}
+
+App::type_op App::getTypeOp(){
+	if(op_store.count("multiply"))
+		return multiply;
+	return sum;
 }
 
